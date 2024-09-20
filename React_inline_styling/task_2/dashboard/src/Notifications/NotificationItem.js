@@ -1,38 +1,23 @@
 import React, { memo } from 'react';
-import PropTypes from 'prop-types';
-import { StyleSheet, css } from 'aphrodite';
+import { StyleSheet, css } from 'aphrodite/no-important';
+
+function NotificationItem({ type, value, html, markAsRead, id }) {
+  if (html) {
+    return (
+      <li className={css(type === "urgent" ? styles.urgentListItem : styles.listItem)} onClick={() => markAsRead(id)} data-priority={type} dangerouslySetInnerHTML={{ __html: html }}></li>
+    );
+  } else {
+    return <li className={css(type === "urgent" ? styles.urgentListItem : styles.listItem)} onClick={() => markAsRead(id)} data-priority={type}>{value}</li>;
+  }
+}
 
 const styles = StyleSheet.create({
-    NotificationListItemDefault: {
-        color: 'blue',
-    },
-
-    NotificationListItemUrgent: {
-        color: 'red',
-    },
+  listItem: {
+    color: "blue",
+  },
+  urgentListItem: {
+    color: "red",
+  }
 });
-
-// functional component ES6 shortcut
-const NotificationItem = ({ type, html, value, markAsRead }) => {
-    // JSX goes here
-    return (
-        <li
-            data-notification-type={ type }
-            dangerouslySetInnerHTML={ html }
-            onClick={ markAsRead }
-            className={ type === 'default' ? css(styles.NotificationListItemDefault) : css(styles.NotificationListItemUrgent) }
-        >{ value }</li>
-    );
-};
-
-NotificationItem.propTypes = {
-    html: PropTypes.shape({ __html: PropTypes.string }),
-    value: PropTypes.string,
-    type: PropTypes.string.isRequired
-};
-
-NotificationItem.defaultProps = {
-    type: 'default',
-}
 
 export default memo(NotificationItem);

@@ -10,10 +10,12 @@ import App from './App/App';
 import ErrorBoundary from './utils/ErrorBoundary';
 import uiReducer from './reducers/uiReducer';
 
-// Create the Redux store with thunk middleware
+// Create the Redux store with thunk middleware and DevTools support
+const composeEnhancers = composeWithDevTools || compose;  // Fallback to default compose if Redux DevTools is not available
+
 const store = createStore(
   uiReducer,
-  composeWithDevTools(applyMiddleware(thunk))
+  composeEnhancers(applyMiddleware(thunk))
 );
 
 ReactDOM.render(
